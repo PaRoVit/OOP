@@ -1,18 +1,20 @@
 #include <iostream>
-#include "include/countOnesInRange.h"
+#include "include/plantGrowth.h"
 
 int main() {
-    int start, end;
-    std::cout << "enter the beginning of the sequence: ";
-    std::cin  >> start;
-    std::cout << "enter the ending of the sequence: ";
-    std::cin  >> end;
+    int upSpeed, downSpeed, desiredHeight;
+    std::cout << "enter the growth rate: ";
+    std::cin  >> upSpeed;
+    std::cout << "enter the reduction rate: ";
+    std::cin  >> downSpeed;
+    std::cout << "enter the final height: ";
+    std::cin  >> desiredHeight;
 
-    int totalOnes = 0;
+    int totalDays = 0;
     
     try {
-        totalOnes = countOnesInRange(start, end);
-        std::cout << "result: " << totalOnes << std::endl;
+        totalDays = plantGrowth(upSpeed, downSpeed, desiredHeight);
+        std::cout << "result: " << totalDays << std::endl;
     } catch (const NegativeValueException& e) {
         std::cerr << e.what() << std::endl;
     } catch (const InvalidRangeException& e) {

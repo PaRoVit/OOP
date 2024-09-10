@@ -1,57 +1,55 @@
 #include <gtest/gtest.h>
-#include "../include/countOnesInRange.h"
+#include "../include/plantGrowth.h"
 
-TEST(CountOnesInRangeTest, ReturnsCorrectResultForRange2To7)
+TEST(plantGrowthTest, ReturnsCorrectResultFor100To10)
 {
-    int start = 2;
-    int end = 7;
-    int result = countOnesInRange(start, end);
-    ASSERT_TRUE(result == 11);
+    int upSpeed = 100;
+    int downSpeed = 10;
+    int desiredHeight = 910;
+    int result = plantGrowth(upSpeed, downSpeed, desiredHeight);
+    ASSERT_TRUE(result == 10);
 }
 
-TEST(CountOnesInRangeTest, ReturnsCorrectResultForRange0To1)
+TEST(plantGrowthTest, ReturnsCorrectResultFor100To10)
 {
-    int start = 0;
-    int end = 1;
-    int result = countOnesInRange(start, end);
+    int upSpeed = 100;
+    int downSpeed = 10;
+    int desiredHeight = 100;
+    int result = plantGrowth(upSpeed, downSpeed, desiredHeight);
     ASSERT_TRUE(result == 1);
 }
 
-TEST(CountOnesInRangeTest, ReturnsCorrectResultForRange0To0)
+TEST(plantGrowthTest, ReturnsCorrectResultForRange60To50)
 {
-    int start = 0;
-    int end = 0;
-    int result = countOnesInRange(start, end);
-    ASSERT_TRUE(result == 0);
+    int upSpeed = 60;
+    int downSpeed = 50;
+    int desiredHeight = 70;
+    int result = plantGrowth(upSpeed, downSpeed, desiredHeight);
+    ASSERT_TRUE(result == 2);
 }
 
-TEST(CountOnesInRangeTest, ReturnsCorrectResultForRange1To1)
+TEST(CountOnesInRangeTest, ThrowsNegativeValueExceptionForDesiredHeightEqualTo0)
 {
-    int start = 1;
-    int end = 1;
-    int result = countOnesInRange(start, end);
-    ASSERT_TRUE(result == 1);
+    int upSpeed = 100;
+    int downSpeed = 50;
+    int desiredHeight = 0;
+    ASSERT_THROW(plantGrowth(upSpeed, downSpeed, desiredHeight), NegativeValueException);
 }
 
-TEST(CountOnesInRangeTest, ThrowsNegativeValueExceptionForNegativeStart)
+TEST(CountOnesInRangeTest, ThrowsNegativeValueExceptionForNegativeDesiredHeight)
 {
-    int start = -1;
-    int end = 7;
-    ASSERT_THROW(countOnesInRange(start, end), NegativeValueException);
+    int upSpeed = 100;
+    int downSpeed = 50;
+    int desiredHeight = -20;
+    ASSERT_THROW(plantGrowth(upSpeed, downSpeed, desiredHeight), NegativeValueException);
 }
 
-TEST(CountOnesInRangeTest, ThrowsNegativeValueExceptionForNegativeStartAndEnd)
+TEST(CountOnesInRangeTest, ThrowsInvalidRangeExceptionForDownwardGrowthExceedingUpwardGrowth)
 {
-    int start = -1;
-    int end = -10;
-    ASSERT_THROW(countOnesInRange(start, end), NegativeValueException);
-}
-
-TEST(CountOnesInRangeTest, ThrowsInvalidRangeExceptionForEndingGreaterThanBeginning)
-{
-    int start = 5;
-    int end = 1;
-    ASSERT_THROW(countOnesInRange(start, end), InvalidRangeException);
+    int upSpeed = 100;
+    int downSpeed = 110;
+    int desiredHeight = 50;
+    ASSERT_THROW(plantGrowth(upSpeed, downSpeed, desiredHeight), InvalidRangeException);
 }
 
 int main(int argc, char **argv) {
