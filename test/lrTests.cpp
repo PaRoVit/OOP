@@ -44,6 +44,22 @@ TEST(CountOnesInRangeTest, ThrowsNegativeValueExceptionForNegativeDesiredHeight)
     ASSERT_THROW(plantGrowth(upSpeed, downSpeed, desiredHeight), NegativeValueException);
 }
 
+TEST(CountOnesInRangeTest, ThrowsNegativeValueExceptionForNegativeUpSpeed)
+{
+    int upSpeed = 0;
+    int downSpeed = 50;
+    int desiredHeight = 900;
+    ASSERT_THROW(plantGrowth(upSpeed, downSpeed, desiredHeight), NegativeValueException);
+}
+
+TEST(CountOnesInRangeTest, ThrowsNegativeValueExceptionForNegativeDownSpeed)
+{
+    int upSpeed = 100;
+    int downSpeed = -50;
+    int desiredHeight = 900;
+    ASSERT_THROW(plantGrowth(upSpeed, downSpeed, desiredHeight), NegativeValueException);
+}
+
 TEST(CountOnesInRangeTest, ThrowsInvalidRangeExceptionForDownwardGrowthExceedingUpwardGrowth)
 {
     int upSpeed = 100;

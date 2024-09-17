@@ -2,27 +2,18 @@
 
 int plantGrowth(int upSpeed, int downSpeed, int desiredHeight) {
 
-    if (desiredHeight <= 0) {
+    if (desiredHeight <= 0 || upSpeed <= 0 || downSpeed < 0) {
         throw NegativeValueException();
     }
 
     if (upSpeed <= downSpeed) {
         throw InvalidRangeException();
-    }
+    }        
 
-    int currentHeight = 0;  
-    int days = 0;          
+    if (upSpeed >= desiredHeight)
+        return 1;
 
-    while (currentHeight < desiredHeight) {
-        days++;  
-        currentHeight += upSpeed;  
+    int days = (desiredHeight - upSpeed + (upSpeed - downSpeed) - 1) / (upSpeed - downSpeed);
 
-        if (currentHeight >= desiredHeight) {
-            return days;  
-        }
-
-        currentHeight -= downSpeed;  
-    }
-
-    return days;  
+    return days + 1;  
 }
