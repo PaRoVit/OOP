@@ -162,6 +162,44 @@ Four Four::operator-(const Four &other) const
     return Four(result);
 }
 
+Four Four::operator*(const Four &other) const
+{
+    size_t resultSize = size + other.size;  // Максимальный возможный размер результата
+    std::string result(resultSize, '0');    // Строка для хранения результата, заполненная нулями
+
+    // Выполняем умножение "в столбик"
+    for (size_t i = 0; i < size; i++)
+    {
+        int d1 = number[i] - '0';  // Первая цифра для умножения
+        int carry = 0;  // Перенос для сложения
+
+        for (size_t j = 0; j < other.size; j++)
+        {
+            int d2 = other.number[j] - '0';  // Вторая цифра для умножения
+            int product = d1 * d2 + (result[i + j] - '0') + carry;  // Промежуточное произведение с переносом
+
+            result[i + j] = (product % 4) + '0';  // Сохраняем остаток от деления на 4 как цифру
+            carry = product / 4;  // Остаток для переноса
+        }
+
+        if (carry > 0)
+        {
+            result[i + other.size] += carry;  // Добавляем перенос на следующую позицию
+        }
+    }
+    size_t nonZeroPos = result.find_last_not_of('0');
+    if (nonZeroPos != std::string::npos)
+    {
+        result.erase(nonZeroPos + 1);
+    }
+    else
+    {
+        result = "0";
+    }
+    std::reverse(result.begin(), result.end());
+    return Four(result);
+}
+
 bool Four::operator==(const Four &other) const
 {
     if (size != other.size)
