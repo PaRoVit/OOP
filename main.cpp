@@ -8,7 +8,7 @@ int main()
     std::cin >> second;
     Four num1(first);
     Four num2(second);
-    Four num3 = num1 - num2;
-    num3.print(std::cout);
+    num1 = std::move(num2);
+    num1.print(std::cout);
     return 0;
 }

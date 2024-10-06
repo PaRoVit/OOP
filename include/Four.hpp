@@ -18,7 +18,7 @@ public:
 
     std::ostream &print(std::ostream &os);
 
-    Four operator=(const Four &other);                   // Assignment operator (=)
+    Four& operator=(Four&& other) noexcept;                   // Assignment operator (=)
     Four operator+(const Four &other) const;             // Addition operator (+)
     Four operator-(const Four &other) const;             // Substraction operator (-)
     Four operator*(const Four &other) const;             // Multiplication operator (*)

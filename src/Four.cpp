@@ -82,19 +82,18 @@ Four::Four(Four &&other) noexcept
 
 // operators
 
-Four Four::operator=(const Four &other)
+Four& Four::operator=(Four&& other) noexcept
 {
-    if (&other != this)
-    {
-        delete[] number;
-        size = other.size;
-        number = new unsigned char[size];
-        for (size_t i = 0; i < size; i++)
-        {
-            number[i] = other.number[i];
-        }
-    }
-    return *this;
+    if (this == &other) {return *this;}
+    
+    delete[] number;
+    number = other.number;
+    size = other.size;
+    other.number = nullptr;
+    other.size = 0;
+    
+    
+    return *this; 
 }
 
 Four Four::operator+(const Four &other) const
@@ -227,38 +226,20 @@ bool Four::operator!=(const Four &other) const
 
 bool Four::operator<(const Four &other) const
 {
-    if (&other == this)
+    if (size != other.size)
     {
-        return false;
+        return size < other.size;
     }
 
-    if (size < other.size)
+    for (size_t i = size; i--;)
     {
-        return true;
-    }
-    else if (size > other.size)
-    {
-        return false;
-    }
-    else
-    {
-        for (size_t i = size; i--;)
+        if (number[i] != other.number[i])
         {
-            if (number[i] < other.number[i])
-            {
-                return true;
-            }
-            else if (number[i] > other.number[i])
-            {
-                return false;
-            }
-            else
-            {
-                continue;
-            }
+            return number[i] < other.number[i];
         }
-        return false;
     }
+
+    return false;  // Если все элементы равны
 }
 
 bool Four::operator<=(const Four &other) const
@@ -302,8 +283,6 @@ Four::~Four() noexcept
 {
     if (size > 0)
     {
-        size = 0;
         delete[] number;
-        number = nullptr;
     }
 }

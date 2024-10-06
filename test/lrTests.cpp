@@ -46,6 +46,17 @@ TEST(FourTest, Multiplication) {
     EXPECT_EQ(result.getNumber()[0], '0'); 
 }
 
+TEST(FourTest, Assignment) {
+    Four a("12");  
+    Four b("23");  
+
+    a = std::move(b);
+
+    EXPECT_EQ(a.getNumber()[1], '2'); 
+    EXPECT_EQ(a.getNumber()[0], '3'); 
+
+}
+
 TEST(FourTest, Comparisons) {
     Four a("23"); 
     Four b("12"); 
