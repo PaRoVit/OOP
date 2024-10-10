@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(lr1)
+project(lr3)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -21,7 +21,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 
-add_library(${CMAKE_PROJECT_NAME}_lib src/plantGrowth.cpp)
+add_library(${CMAKE_PROJECT_NAME}_lib src/array.cpp src/figures.cpp src/point.cpp)
 add_executable(${CMAKE_PROJECT_NAME}_exe main.cpp)
 
 target_link_libraries(${CMAKE_PROJECT_NAME}_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
