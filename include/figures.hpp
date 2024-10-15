@@ -4,10 +4,11 @@
 
 #include <algorithm>
 
-namespace lab3 {
 
 class Figure {
 public:
+    virtual ~Figure() {};
+    virtual Figure* clone() const = 0;
     virtual Point geometricCenter() const = 0;
     virtual operator double () const = 0; 
 };
@@ -28,6 +29,10 @@ public:
 
     operator double () const override;
     Point geometricCenter() const override;
+
+    Triangle* clone() const override {
+        return new Triangle(*this);
+    }
 
     friend std::ostream& operator<<(std::ostream &stream, const Triangle &sq);
     friend std::istream& operator>>(std::istream &stream, Triangle &sq);   
@@ -50,6 +55,10 @@ public:
     operator double () const override;
     Point geometricCenter() const override;
 
+    Square* clone() const override {
+        return new Square(*this); 
+    }
+
     friend std::ostream& operator<<(std::ostream &stream, const Square &sq);
     friend std::istream& operator>>(std::istream &stream, Square &sq);
 };
@@ -71,8 +80,10 @@ public:
     operator double () const override;
     Point geometricCenter() const override;
 
+    Rectangle* clone() const override {
+        return new Rectangle(*this); 
+    }
+
     friend std::ostream& operator<<(std::ostream &stream, const Rectangle &rect);
     friend std::istream& operator>>(std::istream &stream, Rectangle &rect);
 };
-
-}

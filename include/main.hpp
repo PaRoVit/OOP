@@ -4,7 +4,6 @@
 
 #include <iostream>
 
-using namespace lab3;
 
 class MainRoutine {
 public:
@@ -62,6 +61,15 @@ public:
             std::cout << (i + 1) << ":\n";
             std::cout << "  area : " << static_cast<double>(*data[i]) << "\n" <<
                          "  geometric_center : " << data[i]->geometricCenter() << "\n"; 
+
+        if (auto* triangle = dynamic_cast<Triangle*>(data[i])) {
+            std::cout << "  " << *triangle; 
+        } else if (auto* square = dynamic_cast<Square*>(data[i])) {
+            std::cout << "  " << *square; 
+        } else if (auto* rectangle = dynamic_cast<Rectangle*>(data[i])) {
+            std::cout << "  " << *rectangle; 
+        }
+        std::cout << "\n";    
         }
     }
 

@@ -3,34 +3,29 @@
 #include "figures.hpp"
 
 #include <iostream>
+#include <memory>
 
-namespace lab3 {
 
 class Array {
 private:
-    size_t pSize, capacity;
-    Figure** data;
+    std::unique_ptr<Figure*[]> data; // Умный указатель для управления динамическим массивом
+    size_t _size;                     // Текущее количество фигур
+    size_t capacity;                  // Вместимость массива
 
-    void setCapacity(size_t value);
-
-    static Figure** reallocate(Figure** oldData, size_t oldSize, size_t newSize);
+    void resize(size_t newSize);      // Изменение размера массива
 
 public:
+    Array();                          // Конструктор
+    Array(const Array& other);        // Конструктор копирования
+    Array(Array&& other) noexcept;    // Конструктор перемещения
+    ~Array();                         // Деструктор
 
-    Array();
-    Array(size_t n);
-    ~Array();
+    Array& operator=(const Array& other); // Присваивание копированием
+    Array& operator=(Array&& other) noexcept; // Присваивание перемещением
 
-    Array(const Array&);
-    Array(Array&&);
-
-    Figure* & operator[] (size_t ind);
-    Figure* const & operator[] (size_t ind) const;
-
-    size_t size() const;
-    void resize(size_t newSize);
-    void pushBack(Figure* figure);
-    void erase(size_t ind);
+    size_t size() const;              // Возвращает текущее количество фигур
+    void pushBack(Figure* fig);       // Добавляет фигуру
+    void erase(size_t index);         // Удаляет фигуру по индексу
+    Figure* operator[](size_t index) const; // Получение фигуры по индексу
 };
 
-}

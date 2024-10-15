@@ -5,8 +5,6 @@
 
 #include <iostream>
 
-using namespace lab3;
-
 int main() {
     MainRoutine r;
     r.start();

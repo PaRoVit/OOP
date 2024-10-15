@@ -1,6 +1,5 @@
 #include "../include/point.hpp"
 
-namespace lab3 {
 
 Point operator+(const Point &p1, const Point &p2) {
     return Point{p1.x + p2.x, p1.y + p2.y};
@@ -14,8 +13,8 @@ Point operator-(const Point &p1, const Point &p2) {
     return p1 + (-p2);
 }
 // умножение на скаляр
-Point operator*(const Point &p, const double x) {
-    return Point{p.x * x, p.y * x};
+Point operator*(const Point &p, const double l) {
+    return Point{p.x * l, p.y * l};
 }
 // умножение на скаляр 
 Point operator*(const double x, const Point &p) {
@@ -34,13 +33,11 @@ bool operator<(const Point &p1, const Point &p2) {
 }
 
 std::ostream& operator<<(std::ostream &stream, const Point &p) {
-    stream << "Point(" << p.x << ", " << p.y << ")";
+    stream << "(" << p.x << "; " << p.y << ")";
     return stream;
 }
 
 std::istream& operator>>(std::istream &stream, Point &p) {
-    std::cin >> p.x >> p.y;
+    stream >> p.x >> p.y;
     return stream;
-}
-
 }

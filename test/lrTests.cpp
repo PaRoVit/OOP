@@ -4,7 +4,6 @@
 #include "../include/array.hpp"
 #include "../include/main.hpp"
 
-using namespace lab3;
 
 TEST(TriangleTest, ReturnsGeometricCenter)
 {
@@ -24,6 +23,14 @@ TEST(TriangleTest, ReturnsArea)
     Point p3{0, 6};
     Triangle triangle(p1, p2, p3);
     EXPECT_DOUBLE_EQ(static_cast<double>(triangle), 9.0); 
+}
+
+TEST(TriangleTest, ReturnsError1)
+{
+    Point p1{1, 1};
+    Point p2{2, 2};
+    Point p3{3, 3};
+    EXPECT_THROW(Triangle triangle(p1, p2, p3);, std::invalid_argument); 
 }
 
 TEST(SquareTest, ReturnsGeometricCenter)
@@ -95,7 +102,6 @@ TEST(RectangleTest, ReturnsError2)
 
 
 TEST(ArrayTest, PushBackTest) {
-
     Point p1{2, 2};
     Point p2{-1, -1};
     Square* square = new Square(p1, p2);
@@ -107,7 +113,8 @@ TEST(ArrayTest, PushBackTest) {
 
     EXPECT_EQ(data.size(), 1);
     EXPECT_NO_THROW(dynamic_cast<Square*>(data[0]));
-    delete square;
+    data.erase(0);
+    EXPECT_EQ(data.size(), 0);
 }
 
 TEST(ArrayTest, EraseTest) {
@@ -117,9 +124,7 @@ TEST(ArrayTest, EraseTest) {
     Point p2{-1, -1};
     Square* square = new Square(p1, p2);
 
-    Point p3{0, 0};
-    Point p4{3, 0};
-    Point p5{0, 6};
+    Point p3{3, 0};
     Triangle* triangle = new Triangle(p1, p2, p3);
 
     data.pushBack((Figure*)square);
@@ -128,8 +133,8 @@ TEST(ArrayTest, EraseTest) {
 
     EXPECT_EQ(data.size(), 1);
     EXPECT_NO_THROW(dynamic_cast<Triangle*>(data[0]));
-    delete square;
-    delete triangle;
+    data.erase(0);
+    EXPECT_EQ(data.size(), 0);
 }
 
 TEST(ArrayTest, EraseNoErrorTest) {
@@ -146,15 +151,16 @@ TEST(ArrayTest, EraseNoErrorTest) {
     data.pushBack((Figure*)square);
     data.pushBack((Figure*)triangle);
 
-    EXPECT_NO_THROW(data.erase(5));  
+    EXPECT_THROW(data.erase(5), std::out_of_range);  
 
     EXPECT_EQ(data.size(), 2);
 
     EXPECT_NO_THROW(dynamic_cast<Square*>(data[0]));
     EXPECT_NO_THROW(dynamic_cast<Triangle*>(data[1]));
+    data.erase(1);
+    data.erase(0);
+    EXPECT_EQ(data.size(), 0);
 
-    delete square;
-    delete triangle;
 }
 
 TEST(MainRoutineTest, AllAreaTest) {
@@ -189,9 +195,10 @@ TEST(MainRoutineTest, AllAreaTest) {
 
     EXPECT_DOUBLE_EQ(expectedTotalArea, actualTotalArea);
 
-    delete square;
-    delete triangle;
-    delete rectangle;
+    mainRoutine.data.erase(2);
+    mainRoutine.data.erase(1);
+    mainRoutine.data.erase(0);
+    EXPECT_EQ(mainRoutine.data.size(), 0);
 }
 
 
