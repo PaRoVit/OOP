@@ -4,10 +4,10 @@
 
 #include <iostream>
 
-
+template<typename T>
 class MainRoutine {
 public:
-    Array data;
+    Array<Figure<T>*> data;
 
     void eraseFigure() {
         size_t n;
@@ -25,32 +25,32 @@ public:
         std::cin >> type;
         try {
             if (type == "square") {
-                Square *sq = new Square;
+                Square<T> *sq = new Square<T>();
                 std::cin >> *sq;
-                data.pushBack((Figure*)sq);
+                data.pushBack(sq);  // Добавляем квадрат
             } else if (type == "triangle") {
-                Triangle *tr = new Triangle;
+                Triangle<T> *tr = new Triangle<T>();
                 std::cin >> *tr;
-                data.pushBack((Figure*)tr);
+                data.pushBack(tr);  // Добавляем треугольник
             } else if (type == "rectangle") {
-                Rectangle *rect = new Rectangle;
+                Rectangle<T> *rect = new Rectangle<T>();
                 std::cin >> *rect;
-                data.pushBack((Figure*)rect);
+                data.pushBack(rect);  // Добавляем прямоугольник
             } else {
                 std::cout << "Unknown figure name.\n";
                 return;
             }
         } catch (std::invalid_argument &e) {
             std::cout << e.what() << std::endl;
-            return ;
+            return;
         }
         std::cout << "Success.\n";
     }
 
     void allArea() {
-        double area = 0;
+        T area = 0;
         for (size_t i = 0; i < data.size(); i++) {
-            area += static_cast<double>(*data[i]); 
+            area += static_cast<double>(*data[i]);  // Суммируем площади
         }
         std::cout << area << std::endl;
     }
@@ -59,17 +59,17 @@ public:
         std::cout << "Info: \n";
         for (size_t i = 0; i < data.size(); i++) {
             std::cout << (i + 1) << ":\n";
-            std::cout << "  area : " << static_cast<double>(*data[i]) << "\n" <<
-                         "  geometric_center : " << data[i]->geometricCenter() << "\n"; 
-
-        if (auto* triangle = dynamic_cast<Triangle*>(data[i])) {
-            std::cout << "  " << *triangle; 
-        } else if (auto* square = dynamic_cast<Square*>(data[i])) {
-            std::cout << "  " << *square; 
-        } else if (auto* rectangle = dynamic_cast<Rectangle*>(data[i])) {
-            std::cout << "  " << *rectangle; 
-        }
-        std::cout << "\n";    
+            std::cout << "  area : " << static_cast<T>(*data[i]) << "\n"
+                    << "  geometric_center : " << data[i]->geometricCenter() << "\n";
+            // Вывод информации о фигуре
+            if (auto* triangle = dynamic_cast<Triangle<T>*>(data[i])) {
+                std::cout << "  " << *triangle;
+            } else if (auto* square = dynamic_cast<Square<T>*>(data[i])) {
+                std::cout << "  " << *square;
+            } else if (auto* rectangle = dynamic_cast<Rectangle<T>*>(data[i])) {
+                std::cout << "  " << *rectangle;
+            }
+            std::cout << "\n";
         }
     }
 
@@ -82,12 +82,10 @@ public:
                 pushFigure();
             } else if (command == "info") {
                 info();
+            } else if (command == "area") {
+                allArea();
             } else if (command == "erase") {
                 eraseFigure();
-            } else if (command == "area") {
-                allArea();   
-            } else {
-                std::cout << "Unknown command.\n";
             }
             std::cout << "> ";
             std::cin >> command;

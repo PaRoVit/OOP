@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(lr3)
+project(lr4)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -21,7 +21,8 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 
-add_library(${CMAKE_PROJECT_NAME}_lib src/array.cpp src/figures.cpp src/point.cpp)
+add_library(${CMAKE_PROJECT_NAME}_lib INTERFACE)
+target_include_directories(${CMAKE_PROJECT_NAME}_lib INTERFACE include)
 add_executable(${CMAKE_PROJECT_NAME}_exe main.cpp)
 
 target_link_libraries(${CMAKE_PROJECT_NAME}_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)

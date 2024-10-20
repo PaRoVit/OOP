@@ -6,6 +6,6 @@
 #include <iostream>
 
 int main() {
-    MainRoutine r;
+    MainRoutine<double> r;
     r.start();
 }
