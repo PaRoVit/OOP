@@ -79,7 +79,6 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Stack<U>& stack);
 };
 
-// Implementation of Stack methods
 
 template <class T>
 Stack<T>::Stack(std::pmr::memory_resource* resource) : _alloc(resource), _size(0) {}

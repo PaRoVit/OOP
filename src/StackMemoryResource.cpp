@@ -11,7 +11,6 @@ StackMemoryResource::~StackMemoryResource() {
 }
 
 void* StackMemoryResource::do_allocate(size_t bytes, size_t alignment) {
-    // Try to reuse a free block if available
     for (auto& block : blocks) {
         if (block.free && block.size >= bytes) {
             block.free = false;
@@ -19,7 +18,6 @@ void* StackMemoryResource::do_allocate(size_t bytes, size_t alignment) {
         }
     }
 
-    // Allocate a new block if no reusable block is available
     void* new_block = ::operator new(bytes, std::align_val_t(alignment));
     blocks.push_back({ new_block, bytes, false });
     return new_block;
