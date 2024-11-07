@@ -27,11 +27,11 @@ add_executable(${CMAKE_PROJECT_NAME}_exe main.cpp src/StackMemoryResource.cpp)
 
 target_link_libraries(${CMAKE_PROJECT_NAME}_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
 
-# # Добавление тестов
-# enable_testing()
+# Добавление тестов
+enable_testing()
 
-# add_executable(tests test/lrTests.cpp)
-# target_link_libraries(tests ${CMAKE_PROJECT_NAME}_lib gtest_main)
+add_executable(tests test/lrTests.cpp src/StackMemoryResource.cpp)
+target_link_libraries(tests ${CMAKE_PROJECT_NAME}_lib gtest_main)
 
-# # Добавление тестов в тестовый набор
-# add_test(NAME MyProjectTests COMMAND tests)
+# Добавление тестов в тестовый набор
+add_test(NAME MyProjectTests COMMAND tests)

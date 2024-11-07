@@ -1,204 +1,176 @@
 #include <gtest/gtest.h>
-#include "../include/point.hpp"
-#include "../include/figures.hpp"
-#include "../include/array.hpp"
-#include "../include/main.hpp"
+#include <StackMemoryResource.h>
+#include <Stack.h>
 
 
-TEST(TriangleTest, ReturnsGeometricCenter)
+struct Pair {
+    int x;
+    int y;
+};
+
+
+TEST(Constructor, Test)
 {
-    Point<double> p1{0, 0};
-    Point<double> p2{3, 0};
-    Point<double> p3{0, 6};
-    Triangle<double> triangle(p1, p2, p3);
-    Point<double> center = triangle.geometricCenter();
-    EXPECT_DOUBLE_EQ(center.x, 1.0); 
-    EXPECT_DOUBLE_EQ(center.y, 2.0);
+    StackMemoryResource mr1;
+    StackMemoryResource mr2;
+
+    auto stack1 = Stack<int>(&mr1);
+    auto stack2 = Stack<Pair>(&mr2);
+
+    EXPECT_EQ(stack1.size(), 0);
+    EXPECT_EQ(stack2.size(), 0);
 }
 
-TEST(TriangleTest, ReturnsArea)
+TEST(IntType, PushPopTest)
 {
-    Point<double> p1{0, 0};
-    Point<double> p2{3, 0};
-    Point<double> p3{0, 6};
-    Triangle<double> triangle(p1, p2, p3);
-    EXPECT_DOUBLE_EQ(static_cast<double>(triangle), 9.0); 
+    StackMemoryResource mr1;
+
+    auto stack1 = Stack<int>(&mr1);
+
+    EXPECT_THROW(stack1.pop(), std::runtime_error);
+    int elementInt = 10;
+    stack1.push(elementInt);
+    EXPECT_EQ(stack1.size(), 1);
+    auto returnedElementInt = stack1.pop();
+    EXPECT_EQ(*returnedElementInt, elementInt);
+    EXPECT_EQ(stack1.size(), 0);
 }
 
-TEST(TriangleTest, ReturnsError1)
+TEST(IntType, TopTest)
 {
-    Point<double> p1{1, 1};
-    Point<double> p2{2, 2};
-    Point<double> p3{3, 3};
-    EXPECT_THROW(Triangle<double> triangle(p1, p2, p3);, std::invalid_argument); 
+    StackMemoryResource mr1;
+
+    auto stack1 = Stack<int>(&mr1);
+
+    EXPECT_THROW(stack1.top(), std::runtime_error);
+    int elementInt = 10;
+    stack1.push(elementInt);
+    EXPECT_EQ(stack1.size(), 1);
+    auto returnedElementInt = stack1.top();
+    EXPECT_EQ(*returnedElementInt, elementInt);
+    EXPECT_EQ(stack1.size(), 1);
 }
 
-TEST(SquareTest, ReturnsGeometricCenter)
+TEST(IntType, EmptySizeClearTest)
 {
-    Point<double> p1{2, 2};
-    Point<double> p2{-1, -1};
-    Square<double> square(p1, p2);
-    Point center = square.geometricCenter();
-    EXPECT_DOUBLE_EQ(center.x, 0.5); 
-    EXPECT_DOUBLE_EQ(center.y, 0.5);
+    StackMemoryResource mr1;
+
+    auto stack1 = Stack<int>(&mr1);
+
+    EXPECT_EQ(stack1.size(), 0);
+    EXPECT_TRUE(stack1.empty());
+    for (int i; i < 10; ++i)
+        stack1.push(i);
+    EXPECT_EQ(stack1.size(), 10);
+    EXPECT_FALSE(stack1.empty());
+
+    stack1.clear();
+    EXPECT_EQ(stack1.size(), 0);
 }
 
-TEST(SquareTest, ReturnsArea)
+TEST(IntType, EqTest)
 {
-    Point<double> p1{2, 2};
-    Point<double> p2{-1, -1};
-    Square<double> square(p1, p2);
-    EXPECT_DOUBLE_EQ(static_cast<double>(square), 9.0); 
+    StackMemoryResource mr1;
+    StackMemoryResource mr2;
+    auto stack1 = Stack<int>(&mr1);
+    auto stack2 = Stack<int>(&mr2);
+
+    for (int i = 0; i < 10; ++i)
+        stack1.push(i);
+
+    for (int i = 0; i < 10; ++i)
+        stack2.push(i);  
+
+    EXPECT_TRUE(stack1 == stack2); 
+
+    stack2.pop();
+
+    EXPECT_TRUE(stack1 != stack2);
 }
 
-TEST(SquareTest, ReturnsError1)
+TEST(PairType, PushPopTest)
 {
-    Point<double> p1{1, 0};
-    Point<double> p2{2, 0};
-    EXPECT_THROW(Square<double> square(p1, p2), std::invalid_argument); 
+    StackMemoryResource mr2;
+
+    auto stack2 = Stack<Pair>(&mr2);
+
+    EXPECT_THROW(stack2.pop(), std::runtime_error);
+    auto elementPair = Pair{1, 2};
+    stack2.push(elementPair);
+    EXPECT_EQ(stack2.size(), 1);
+    auto returnedElementPair = stack2.pop();
+    EXPECT_EQ(returnedElementPair->x, elementPair.x);
+    EXPECT_EQ(returnedElementPair->y, elementPair.y);
+    EXPECT_EQ(stack2.size(), 0);
 }
 
-TEST(SquareTest, ReturnsError2)
+TEST(PairType, TopTest)
 {
-    Point<double> p1{0, 0};
-    Point<double> p2{0, 0};
-    EXPECT_THROW(Square<double> square(p1, p2), std::invalid_argument); 
+    StackMemoryResource mr2;
+
+    auto stack2 = Stack<Pair>(&mr2);
+
+    EXPECT_THROW(stack2.top(), std::runtime_error);
+    auto elementPair = Pair{1, 2};
+    stack2.push(elementPair);
+    EXPECT_EQ(stack2.size(), 1);
+    auto returnedElementPair = stack2.top();
+    EXPECT_EQ(returnedElementPair->x, elementPair.x);
+    EXPECT_EQ(returnedElementPair->y, elementPair.y);
+    EXPECT_EQ(stack2.size(), 1);
 }
 
-TEST(RectangleTest, ReturnsGeometricCenter)
+TEST(PairType, EmptySizeClearTest)
 {
-    Point<double> p1{3, 5};
-    Point<double> p2{-1, -1};
-    Rectangle<double> rectangle(p1, p2);
-    Point<double> center = rectangle.geometricCenter();
-    EXPECT_DOUBLE_EQ(center.x, 1.0); 
-    EXPECT_DOUBLE_EQ(center.y, 2.0);
+    StackMemoryResource mr2;
+
+    auto stack2 = Stack<Pair>(&mr2);
+
+    EXPECT_EQ(stack2.size(), 0);
+    EXPECT_TRUE(stack2.empty());
+    for (int i; i < 10; ++i){
+        auto element = Pair{i, i};
+        stack2.push(element);
+    }
+
+    EXPECT_EQ(stack2.size(), 10);
+    EXPECT_FALSE(stack2.empty());
+
+    stack2.clear();
+    EXPECT_EQ(stack2.size(), 0);
 }
 
-
-TEST(RectangleTest, ReturnsArea)
+TEST(StackMemoryRes, DestructorTest)
 {
-    Point<double> p1{3, 5};
-    Point<double> p2{-1, -1};
-    Rectangle<double> rectangle(p1, p2);
-    EXPECT_DOUBLE_EQ(static_cast<double>(rectangle), 24.0); 
+    auto *mr = new StackMemoryResource();
+    delete mr;
 }
 
-TEST(RectangleTest, ReturnsError1)
+TEST(StackMemoryRes, AllocateAndDeallocateTest)
 {
-    Point<double> p1{1, 0};
-    Point<double> p2{2, 0};
-    EXPECT_THROW(Rectangle<double> rectangle(p1, p2);, std::invalid_argument); 
-}
+    StackMemoryResource mr;
+    int element1 = 42, element2 = 100;
 
-TEST(RectangleTest, ReturnsError2)
-{
-    Point<double> p1{0, 0};
-    Point<double> p2{0, 0};
-    EXPECT_THROW(Rectangle<double> rectangle(p1, p2);, std::invalid_argument); 
-}
+    auto* number1 = static_cast<int*>(mr.allocate(sizeof(int), alignof(int)));
+    *number1 = element1;
+    EXPECT_EQ(*number1, element1);
 
+    mr.deallocate(number1, sizeof(int), alignof(int));
 
+    auto* reused_number = static_cast<int*>(mr.allocate(sizeof(int), alignof(int)));
+    *reused_number = element2;
+    EXPECT_EQ(*reused_number, element2);
 
+    EXPECT_EQ(number1, reused_number);
 
-TEST(ArrayTest, PushBackTest) {
-    Point<double> p1{2, 2};
-    Point<double> p2{-1, -1};
-    Square<double>* square = new Square<double>(p1, p2);
+    mr.deallocate(reused_number, sizeof(int), alignof(int));
 
-    Array<Figure<double>*> data;
-
-    data.pushBack((Figure<double>*)square);
-
-
-    EXPECT_EQ(data.size(), 1);
-    EXPECT_NO_THROW(dynamic_cast<Square<double>*>(data[0]));
-    data.erase(0);
-    EXPECT_EQ(data.size(), 0);
-}
-
-TEST(ArrayTest, EraseTest) {
-    Array<Figure<double>*> data;
-    Point<double> p1{2, 2};
-    Point<double> p2{-1, -1};
-    Square<double>* square = new Square<double>(p1, p2);
-
-    Point<double> p3{3, 0};
-    Triangle<double>* triangle = new Triangle<double>(p1, p2, p3);
-
-    data.pushBack((Figure<double>*)square);
-    data.pushBack((Figure<double>*)triangle);
-    data.erase(0);
-
-    EXPECT_EQ(data.size(), 1);
-    EXPECT_NO_THROW(dynamic_cast<Triangle<double>*>(data[0]));
-    data.erase(0);
-    EXPECT_EQ(data.size(), 0);
-}
-
-TEST(ArrayTest, EraseNoErrorTest) {
-    Array<Figure<double>*> data;
-
-    Point<double> p1{2, 2};
-    Point<double> p2{-1, -1};
-    Square<double>* square = new Square<double>(p1, p2);
-
-    Point<double> p3{0, 0};
-    Point<double> p4{3, 0};
-    Triangle<double>* triangle = new Triangle<double>(p1, p3, p4);
-
-    data.pushBack((Figure<double>*)square);
-    data.pushBack((Figure<double>*)triangle);
-
-    EXPECT_THROW(data.erase(5), std::out_of_range);  
-
-    EXPECT_EQ(data.size(), 2);
-
-    EXPECT_NO_THROW(dynamic_cast<Square<double>*>(data[0]));
-    EXPECT_NO_THROW(dynamic_cast<Triangle<double>*>(data[1]));
-    data.erase(1);
-    data.erase(0);
-    EXPECT_EQ(data.size(), 0);
+    EXPECT_THROW(mr.deallocate(reused_number, sizeof(int), alignof(int)), std::logic_error);
 
 }
 
-TEST(MainRoutineTest, AllAreaTest) {
-    MainRoutine<double> mainRoutine;
 
-    Point<double> p1{2, 2};
-    Point<double> p2{-1, -1};
-    Square<double>* square = new Square<double>(p1, p2); // S = 9
 
-    Point<double> p3{0, 0};
-    Point<double> p4{3, 0};
-    Point<double> p5{0, 6};
-    Triangle<double>* triangle = new Triangle<double>(p3, p4, p5); // S = 9
-
-    Rectangle<double>* rectangle = new Rectangle<double>(p1, p4);  // S = 2
-
-    // Добавляем фигуры в массив
-    mainRoutine.data.pushBack((Figure<double>*)square);
-    mainRoutine.data.pushBack((Figure<double>*)triangle);
-    mainRoutine.data.pushBack((Figure<double>*)rectangle);
-
-    double expectedTotalArea = 9.0 + 9.0 + 2.0;
-
-    std::ostringstream out;
-    std::streambuf* coutbuf = std::cout.rdbuf();
-    std::cout.rdbuf(out.rdbuf());
-
-    mainRoutine.allArea();
-
-    std::cout.rdbuf(coutbuf);
-    double actualTotalArea = std::stod(out.str());
-
-    EXPECT_DOUBLE_EQ(expectedTotalArea, actualTotalArea);
-
-    mainRoutine.data.erase(2);
-    mainRoutine.data.erase(1);
-    mainRoutine.data.erase(0);
-    EXPECT_EQ(mainRoutine.data.size(), 0);
-}
 
 
 int main(int argc, char **argv) {
