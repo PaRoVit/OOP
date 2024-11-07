@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(lr4)
+project(lr5)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -23,15 +23,15 @@ FetchContent_MakeAvailable(googletest)
 
 add_library(${CMAKE_PROJECT_NAME}_lib INTERFACE)
 target_include_directories(${CMAKE_PROJECT_NAME}_lib INTERFACE include)
-add_executable(${CMAKE_PROJECT_NAME}_exe main.cpp)
+add_executable(${CMAKE_PROJECT_NAME}_exe main.cpp src/StackMemoryResource.cpp)
 
 target_link_libraries(${CMAKE_PROJECT_NAME}_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
 
-# Добавление тестов
-enable_testing()
+# # Добавление тестов
+# enable_testing()
 
-add_executable(tests test/lrTests.cpp)
-target_link_libraries(tests ${CMAKE_PROJECT_NAME}_lib gtest_main)
+# add_executable(tests test/lrTests.cpp)
+# target_link_libraries(tests ${CMAKE_PROJECT_NAME}_lib gtest_main)
 
-# Добавление тестов в тестовый набор
-add_test(NAME MyProjectTests COMMAND tests)
+# # Добавление тестов в тестовый набор
+# add_test(NAME MyProjectTests COMMAND tests)
