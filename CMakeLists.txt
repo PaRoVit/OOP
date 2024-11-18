@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(lr5)
+project(lr6)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -21,16 +21,15 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 
-add_library(${CMAKE_PROJECT_NAME}_lib INTERFACE)
-target_include_directories(${CMAKE_PROJECT_NAME}_lib INTERFACE include)
-add_executable(${CMAKE_PROJECT_NAME}_exe main.cpp src/StackMemoryResource.cpp)
+add_library(${CMAKE_PROJECT_NAME}_lib src/bear.cpp src/factory.cpp src/npc.cpp src/observer.cpp src/outlaw.cpp src/visitor.cpp src/werewolf.cpp)
+add_executable(${CMAKE_PROJECT_NAME}_exe main.cpp)
 
 target_link_libraries(${CMAKE_PROJECT_NAME}_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
 
 # Добавление тестов
 enable_testing()
 
-add_executable(tests test/lrTests.cpp src/StackMemoryResource.cpp)
+add_executable(tests test/lrTests.cpp)
 target_link_libraries(tests ${CMAKE_PROJECT_NAME}_lib gtest_main)
 
 # Добавление тестов в тестовый набор
