@@ -9,6 +9,7 @@
 int main() {
     NPCSet characters;
 
+    // Создаём 10 рандомных персонажей
     std::string characterNames[10] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
 
     std::srand(time(NULL));
@@ -22,7 +23,7 @@ int main() {
     std::cout << "Starting battles..." << std::endl;
     std::cout << characters;
  
-    for (size_t distance = 20; (distance <= 100) && !characters.empty(); distance += 10) {
+    for (size_t distance = 20; (distance <= 400) && !characters.empty(); distance += 10) {
         auto defeatedCharacters = simulateBattles(characters, distance);
 
         // Удаление побежденных
