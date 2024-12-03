@@ -1,73 +1,72 @@
 #include <gtest/gtest.h>
+
 #include "../include/npc.hpp"
-#include "../include/visitor.hpp"
-#include "../include/factory.hpp"
+#include "../include/observer.hpp"
 #include "../include/bear.hpp"
 #include "../include/outlaw.hpp"
 #include "../include/werewolf.hpp"
 
-TEST(Game, InsertTest) {
-    NPCSet characters;
 
-    characters.insert(createNPC(BearType, "bear", 10, 40, "log1.txt"));
-    EXPECT_TRUE(characters.size() == 1);
-}
-
-TEST(Game, KillTest) {
-    Bear bear("b", 10, 20);
-    Outlaw outlaw("o", 5, 40);
-    Werewolf werewolf("w", 50, 100);
-
-    EXPECT_TRUE(bear.kill(std::make_shared<Werewolf>(werewolf)));
-    EXPECT_TRUE(outlaw.kill(std::make_shared<Bear>(bear)));
-    EXPECT_TRUE(werewolf.kill(std::make_shared<Outlaw>(outlaw)));
-
-    EXPECT_FALSE(bear.kill(std::make_shared<Outlaw>(outlaw)));
-    EXPECT_FALSE(outlaw.kill(std::make_shared<Werewolf>(werewolf)));
-    EXPECT_FALSE(werewolf.kill(std::make_shared<Bear>(bear)));
-
-}
-
-TEST(Game, BattleTest) {
+TEST(FightTest1, BearVsOutlaw) {
     testing::internal::CaptureStdout();
-    
-    NPCSet characters;
 
-    characters.insert(createNPC(BearType, "Bear1", 0, 50, "test_fight.txt")); 
-    characters.insert(createNPC(OutlawType, "Outlaw1", 5, 5, "test_fight.txt")); 
-    characters.insert(createNPC(WerewolfType, "Werewolf1", 10, 40, "test_fight.txt"));  
+    auto bear = createNPC(BearType, "Bear", 0, 0, "test_fight.txt");
+    auto outlaw = createNPC(OutlawType, "Outlaw", 1, 1, "test_fight.txt"); //! will be killed
+    EXPECT_FALSE(outlaw->acceptVisitor(bear));
+    outlaw->mustDie();
 
-    characters.insert(createNPC(BearType, "Bear2", 60, 90, "test_fight.txt")); 
-    characters.insert(createNPC(OutlawType, "Outlaw2", 25, 35, "test_fight.txt"));
-    characters.insert(createNPC(WerewolfType, "Werewolf2", 0, 2, "test_fight.txt")); 
-
-    characters.insert(createNPC(BearType, "Bear3", 20, 100, "test_fight.txt")); 
-    characters.insert(createNPC(OutlawType, "Outlaw3", 40, 50, "test_fight.txt"));
-    characters.insert(createNPC(WerewolfType, "Werewolf3", 80, 90, "test_fight.txt"));
-
-    auto dead_list = simulateBattles(characters, 20);
-    for (auto &d : dead_list)
-        characters.erase(d);
+    EXPECT_TRUE(bear->isAlive());
+    EXPECT_FALSE(outlaw->isAlive());
 
     testing::internal::GetCapturedStdout();
-
-    EXPECT_EQ(characters.size(), 5);
 }
 
-TEST(Observer, ObserverTest) {
-    auto bear = std::make_shared<Bear>("Bear", 0, 5);
-    auto outlaw = std::make_shared<Outlaw>("Outlaw", 5, 10);
-    
+TEST(FightTest2, BearVsWerewolf) {
     testing::internal::CaptureStdout();
 
-    auto textObserver = std::make_shared<ConsoleObserver>();
-    bear->addObserver(textObserver);
-    bear->kill(outlaw);
+    auto bear = createNPC(BearType, "Bear", 0, 0, "test_fight.txt");
+    auto werewolf = createNPC(WerewolfType, "Werewolf", 1, 1, "test_fight.txt"); //! will be killed
+    ASSERT_TRUE(werewolf->acceptVisitor(bear));
+    werewolf->mustDie();
 
-    std::string textOutput = testing::internal::GetCapturedStdout();
-    std::string expectedOutput = "[DEFEAT] Battle log:\nbear: Bear at {0, 5} \noutlaw: Outlaw at {5, 10} \nBear lost to Outlaw\n";
+    ASSERT_TRUE(bear->isAlive());
+    ASSERT_FALSE(werewolf->isAlive());
 
-    EXPECT_EQ(textOutput, expectedOutput);
+    testing::internal::GetCapturedStdout();
+}
+
+TEST(FightTest3, MainFighting) {
+    
+    set_t NPCs;
+    NPCs.insert(createNPC(BearType, "Bear1", 15, 15, "test_fight.txt")); 
+    NPCs.insert(createNPC(BearType, "Bear2", 10, 10, "test_fight.txt"));
+    NPCs.insert(createNPC(BearType, "Bear3", 15, 15, "test_fight.txt"));
+    NPCs.insert(createNPC(BearType, "Bear4", 10, 10, "test_fight.txt"));
+    NPCs.insert(createNPC(OutlawType, "Outlaw1", 10, 10, "test_fight.txt")); 
+    NPCs.insert(createNPC(OutlawType, "Outlaw2", 30, 30, "test_fight.txt")); 
+    NPCs.insert(createNPC(WerewolfType, "Werewolf1", 10, 10, "test_fight.txt")); 
+    NPCs.insert(createNPC(WerewolfType, "Werewolf2", 15, 15, "test_fight.txt")); 
+    set_t killed;
+    
+    EXPECT_EQ(8, NPCs.size());
+    testing::internal::CaptureStdout();
+    for (auto& attacker : NPCs) {
+        for (auto& defender : NPCs) {
+            if (attacker->isAlive())
+                if (defender->isAlive())
+                    if (defender->acceptVisitor(attacker)) {
+                        defender->mustDie();
+                        killed.insert(defender);
+                    }
+        }
+    }
+    testing::internal::GetCapturedStdout();
+    
+    EXPECT_EQ(6, killed.size());
+    for (const auto& npc : killed) {
+        NPCs.erase(npc);
+    }
+    EXPECT_EQ(2, NPCs.size());
 }
 
 int main(int argc, char **argv) {

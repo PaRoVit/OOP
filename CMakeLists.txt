@@ -19,17 +19,19 @@ FetchContent_Declare(
 # For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
+add_library(GTest::GTest INTERFACE IMPORTED)
+target_link_libraries(GTest::GTest INTERFACE gtest_main)
 
 
-add_executable(lr7_exe main.cpp src/bear.cpp src/npc.cpp src/outlaw.cpp src/werewolf.cpp include/bear.hpp include/npc.hpp include/observer.hpp include/outlaw.hpp include/werewolf.hpp)
+add_executable(lr7_exe main.cpp include/game_engine.hpp src/bear.cpp src/npc.cpp src/outlaw.cpp src/werewolf.cpp include/bear.hpp include/npc.hpp include/observer.hpp include/outlaw.hpp include/werewolf.hpp)
 
-target_include_directories(lr7_exe PRIVATE include)
+target_include_directories(lr7_exe PRIVATE include )
 
-# # Добавление тестов
-# enable_testing()
+# Добавление тестов
+enable_testing()
 
-# add_executable(tests test/lrTests.cpp)
-# target_link_libraries(tests ${CMAKE_PROJECT_NAME}_lib gtest_main)
+add_executable(tests test/lrTests.cpp src/bear.cpp src/npc.cpp src/outlaw.cpp src/werewolf.cpp include/bear.hpp include/npc.hpp include/observer.hpp include/outlaw.hpp include/werewolf.hpp)
+target_link_libraries(tests PRIVATE GTest::GTest)
+target_include_directories(tests PRIVATE ../include)
 
-# # Добавление тестов в тестовый набор
-# add_test(NAME MyProjectTests COMMAND tests)
+add_test(tests tests)
