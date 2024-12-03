@@ -9,10 +9,6 @@ void Outlaw::display() {
     std::cout << *this;
 }
 
-std::string Outlaw::getType() const {
-    return "Outlaw";
-}
-
 bool Outlaw::kill(std::shared_ptr<Bear> other) {
     notifyBattleObservers(other, true);
     return true;
@@ -33,8 +29,8 @@ void Outlaw::save(std::ostream &outputStream) {
     NPC::save(outputStream);
 }
 
-bool Outlaw::acceptVisitor(Visitor &visitor) {
-    return visitor.visit(*this);
+bool Outlaw::acceptVisitor(const std::shared_ptr<NPC> &visitor) {
+    return visitor->kill(std::shared_ptr<Outlaw>(this,[](Outlaw*){}));;
 }
 
 std::ostream &operator<<(std::ostream &os, Outlaw &outlaw) {

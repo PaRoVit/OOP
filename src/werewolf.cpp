@@ -9,10 +9,6 @@ void Werewolf::display() {
     std::cout << *this;
 }
 
-std::string Werewolf::getType() const {
-    return "Werewolf";
-}
-
 bool Werewolf::kill(std::shared_ptr<Outlaw> other) {
     notifyBattleObservers(other, true);
     return true;
@@ -33,8 +29,8 @@ void Werewolf::save(std::ostream &outputStream) {
     NPC::save(outputStream);
 }
 
-bool Werewolf::acceptVisitor(Visitor &visitor) {
-    return visitor.visit(*this);
+bool Werewolf::acceptVisitor(const std::shared_ptr<NPC> &visitor) {
+    return visitor->kill(std::shared_ptr<Werewolf>(this,[](Werewolf*){}));;
 }
 
 std::ostream &operator<<(std::ostream &os, Werewolf &werewolf) {

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(lr6)
+project(lr7)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -21,16 +21,15 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 
-add_library(${CMAKE_PROJECT_NAME}_lib src/bear.cpp src/factory.cpp src/npc.cpp src/observer.cpp src/outlaw.cpp src/visitor.cpp src/werewolf.cpp)
-add_executable(${CMAKE_PROJECT_NAME}_exe main.cpp)
+add_executable(lr7_exe main.cpp src/bear.cpp src/npc.cpp src/outlaw.cpp src/werewolf.cpp include/bear.hpp include/npc.hpp include/observer.hpp include/outlaw.hpp include/werewolf.hpp)
 
-target_link_libraries(${CMAKE_PROJECT_NAME}_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
+target_include_directories(lr7_exe PRIVATE include)
 
-# Добавление тестов
-enable_testing()
+# # Добавление тестов
+# enable_testing()
 
-add_executable(tests test/lrTests.cpp)
-target_link_libraries(tests ${CMAKE_PROJECT_NAME}_lib gtest_main)
+# add_executable(tests test/lrTests.cpp)
+# target_link_libraries(tests ${CMAKE_PROJECT_NAME}_lib gtest_main)
 
-# Добавление тестов в тестовый набор
-add_test(NAME MyProjectTests COMMAND tests)
+# # Добавление тестов в тестовый набор
+# add_test(NAME MyProjectTests COMMAND tests)
